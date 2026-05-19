@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foro de Ideaci&oacute;n &mdash; LectorSync | EquipoEPMB02-4</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #e0e7ff;
+      --primary-dark: #3730a3;
+      --accent: #f59e0b;
+      --accent-light: #fef3c7;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ── Header ───────────────────────────────────────── */
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .header h1 span { color: var(--accent); }
+
+    .header p {
+      font-size: 17px;
+      opacity: .85;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 28px;
+      font-size: 14px;
+    }
+
+    .header-meta div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: .9;
+    }
+
+    .header-meta strong { font-weight: 700; }
+
+    /* ── Container ────────────────────────────────────── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* ── Section ──────────────────────────────────────── */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 32px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .section-icon.blue   { background: var(--primary-light); }
+    .section-icon.amber  { background: var(--accent-light); }
+    .section-icon.green  { background: #d1fae5; }
+    .section-icon.purple { background: #ede9fe; }
+    .section-icon.rose   { background: #ffe4e6; }
+
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .section-body {
+      padding: 24px 28px 28px;
+    }
+
+    .section-body p {
+      margin-bottom: 16px;
+      text-align: justify;
+    }
+
+    .section-body p:last-child { margin-bottom: 0; }
+
+    /* ── Tabla comparativa ────────────────────────────── */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead th {
+      background: var(--primary);
+      color: #fff;
+      text-align: left;
+      padding: 12px 16px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr:nth-child(even) { background: #f8fafc; }
+
+    tbody tr:hover { background: var(--primary-light); }
+
+    .app-name {
+      font-weight: 700;
+      color: var(--primary-dark);
+      white-space: nowrap;
+    }
+
+    .price-tag {
+      display: inline-block;
+      background: var(--accent-light);
+      color: #92400e;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .analysis-box {
+      background: #f0fdf4;
+      border-left: 4px solid var(--success);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 20px;
+      font-size: 15px;
+    }
+
+    .analysis-box strong { color: #065f46; }
+
+    /* ── Objetivos ────────────────────────────────────── */
+    .obj-general {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 18px 22px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 24px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .obj-list {
+      list-style: none;
+      counter-reset: obj;
+    }
+
+    .obj-list li {
+      counter-increment: obj;
+      position: relative;
+      padding: 16px 16px 16px 64px;
+      margin-bottom: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      transition: box-shadow .2s;
+    }
+
+    .obj-list li:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .obj-list li::before {
+      content: counter(obj);
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .obj-list li strong {
+      color: var(--primary-dark);
+    }
+
+    /* ── Justificaci&oacute;n cite ────────────────────────────── */
+    .cite {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* ── Referencias ──────────────────────────────────── */
+    .ref-list {
+      list-style: none;
+      font-size: 14px;
+    }
+
+    .ref-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.6;
+    }
+
+    .ref-list li:last-child { border-bottom: none; }
+
+    .ref-list em { font-style: italic; }
+
+    .ref-list a {
+      color: var(--primary);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .ref-list a:hover { text-decoration: underline; }
+
+    /* ── Footer ───────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    .footer strong { color: var(--primary); }
+
+    /* ── Print ────────────────────────────────────────── */
+    @media print {
+      body { background: #fff; font-size: 12pt; }
+      .header { padding: 24px; background: var(--primary) !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .section { box-shadow: none; break-inside: avoid; }
+      .obj-list li { break-inside: avoid; }
+    }
+
+    @media (max-width: 640px) {
+      .header { padding: 32px 16px 28px; }
+      .section-body { padding: 18px 16px 20px; }
+      .header-meta { flex-direction: column; gap: 8px; }
+      .obj-list li { padding-left: 52px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ HEADER -->
+<header class="header">
+  <div class="header-badge">Foro de Proyecto &mdash; Ideaci&oacute;n</div>
+  <h1>Lector<span>Sync</span></h1>
+  <p>Lectura digital sincronizada con s&iacute;ntesis de voz y resaltado visual palabra por palabra en tiempo real</p>
+
+  <div class="header-meta">
+    <div><strong>Equipo:</strong> EquipoEPMB02 - 4</div>
+    <div><strong>Programa:</strong> Especializaci&oacute;n Tecnol&oacute;gica en Desarrollo de Aplicaciones para Redes M&oacute;viles</div>
+    <div><strong>M&oacute;dulo:</strong> &Eacute;nfasis en Programaci&oacute;n M&oacute;vil</div>
+    <div><strong>Fecha:</strong> Mayo 2026</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════ SINOPSIS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon blue">&#128214;</div>
+      <h2>Sinopsis</h2>
+    </div>
+    <div class="section-body">
+      <p>
+        LectorSync es una aplicaci&oacute;n m&oacute;vil multiplataforma orientada a transformar la experiencia de lectura digital
+        mediante la integraci&oacute;n de s&iacute;ntesis de voz (Text-to-Speech) sincronizada con resaltado visual palabra por
+        palabra en tiempo real. A trav&eacute;s de la app, los usuarios pueden importar libros en formatos EPUB, PDF y TXT,
+        organizarlos en una biblioteca personal con visualizaci&oacute;n de portadas y progreso de lectura, navegar por
+        cap&iacute;tulos con tabla de contenidos interactiva, y escuchar el contenido con voces naturales mientras el texto
+        se ilumina en pantalla al ritmo de la lectura. La interfaz de lectura permite personalizar el tama&ntilde;o de
+        fuente, controlar la velocidad de reproducci&oacute;n (0.75x, 1x, 1.5x), y retomar la lectura exactamente donde se
+        dej&oacute; gracias a la sincronizaci&oacute;n de progreso con el servidor. LectorSync est&aacute; dirigida tanto a estudiantes y
+        lectores habituales que buscan una experiencia de lectura enriquecida, como a personas con dislexia, baja
+        visi&oacute;n o dificultades de aprendizaje que se benefician de la estimulaci&oacute;n audiovisual simult&aacute;nea. La
+        aplicaci&oacute;n est&aacute; dise&ntilde;ada para funcionar en Android, iOS y navegador web desde su primera versi&oacute;n gracias a
+        Ionic con Capacitor, y cuenta con un backend en Node.js con API REST, PostgreSQL y autenticaci&oacute;n JWT.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ REFERENCIAS APPS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon amber">&#128279;</div>
+      <h2>Referencias de Aplicaciones Pertinentes</h2>
+    </div>
+    <div class="section-body">
+      <p>
+        Seg&uacute;n <span class="cite">Atlas AI Dev (2026)</span>, existe un ecosistema creciente de aplicaciones de lectura con
+        Text-to-Speech que atienden diferentes segmentos del mercado. A continuaci&oacute;n se presentan las referencias
+        m&aacute;s pertinentes para LectorSync, comparando sus atributos principales, caracter&iacute;stica diferenciadora y
+        modelo de precios:
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Software</th>
+              <th>Lo mejor para</th>
+              <th>Caracter&iacute;stica destacada</th>
+              <th>Precio inicial</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="app-name">Speechify</td>
+              <td>Estudiantes y profesionales que necesitan escuchar documentos</td>
+              <td>M&aacute;s de 200 voces premium con IA, OCR para escanear p&aacute;ginas f&iacute;sicas, ganadora del Apple Design Award en WWDC 2025</td>
+              <td><span class="price-tag">Gratis / $139 USD/a&ntilde;o</span></td>
+            </tr>
+            <tr>
+              <td class="app-name">Voice Dream Reader</td>
+              <td>Personas con dislexia y discapacidad visual</td>
+              <td>Resaltado palabra por palabra sincronizado con TTS, casi 200 voces en 25+ idiomas, referente en accesibilidad educativa</td>
+              <td><span class="price-tag">$19.99 USD (iOS)</span></td>
+            </tr>
+            <tr>
+              <td class="app-name">NaturalReader</td>
+              <td>Lectura de documentos y p&aacute;ginas web en voz alta</td>
+              <td>1.000+ voces con tecnolog&iacute;a neural TTS y LLM, disponible como app web, m&oacute;vil y extensi&oacute;n de Chrome</td>
+              <td><span class="price-tag">Gratis / $60 USD/a&ntilde;o</span></td>
+            </tr>
+            <tr>
+              <td class="app-name">Moon+ Reader</td>
+              <td>Lectores digitales en Android que buscan personalizaci&oacute;n</td>
+              <td>Soporte EPUB, PDF, MOBI, CBR; +50 millones de descargas en Google Play; TTS con alta personalizaci&oacute;n visual</td>
+              <td><span class="price-tag">Gratis / $6.99 USD Pro</span></td>
+            </tr>
+            <tr>
+              <td class="app-name">Amazon Kindle</td>
+              <td>Ecosistema completo de lectura y audiolibros</td>
+              <td>Sincronizaci&oacute;n Whispersync, integraci&oacute;n con Audible, VoiceView para accesibilidad, +100 millones de usuarios</td>
+              <td><span class="price-tag">Gratis / $11.99 USD/mes</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="analysis-box">
+        <strong>An&aacute;lisis comparativo:</strong> Speechify y Voice Dream Reader lideran en calidad de TTS y
+        accesibilidad, pero su enfoque es primordialmente la reproducci&oacute;n de documentos sin una experiencia de
+        lectura inmersiva por cap&iacute;tulos. Moon+ Reader ofrece la mejor personalizaci&oacute;n de lectura pero su TTS
+        carece de sincronizaci&oacute;n visual avanzada. Kindle domina el mercado pero su modelo es cerrado y dependiente
+        del ecosistema Amazon. <strong>LectorSync se diferencia</strong> al combinar lectura por cap&iacute;tulos con TTS
+        sincronizado palabra por palabra, soporte multiformat abierto (EPUB/PDF/TXT) y sincronizaci&oacute;n de progreso
+        con backend propio, todo desde una base de c&oacute;digo multiplataforma con Ionic.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ OBJETIVOS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon green">&#127919;</div>
+      <h2>Objetivos</h2>
+    </div>
+    <div class="section-body">
+
+      <h3 style="font-size:17px; font-weight:700; margin-bottom:12px; color:var(--primary-dark);">Objetivo General</h3>
+
+      <div class="obj-general">
+        Desarrollar LectorSync, una aplicaci&oacute;n m&oacute;vil multiplataforma (Android, iOS y Web) que permita a los usuarios
+        importar, leer y escuchar libros digitales con s&iacute;ntesis de voz sincronizada y resaltado visual palabra por
+        palabra, utilizando el framework Ionic con Angular y Capacitor, logrando que al menos el 90% de las
+        funcionalidades operen correctamente en las tres plataformas y que los usuarios de prueba reporten una mejora
+        percibida en su experiencia de lectura durante las 8 semanas del m&oacute;dulo.
+      </div>
+
+      <h3 style="font-size:17px; font-weight:700; margin-bottom:16px; color:var(--primary-dark);">Objetivos Espec&iacute;ficos</h3>
+
+      <ol class="obj-list">
+        <li>
+          <strong>Dise&ntilde;ar la arquitectura de la aplicaci&oacute;n multiplataforma en Ionic con Angular,</strong>
+          contemplando los m&oacute;dulos de autenticaci&oacute;n (JWT), biblioteca digital personal, lector con TTS sincronizado
+          y panel de configuraci&oacute;n de lectura, en un plazo de dos semanas desde el inicio del m&oacute;dulo.
+        </li>
+        <li>
+          <strong>Implementar un sistema de autenticaci&oacute;n seguro</strong> con registro e inicio de sesi&oacute;n mediante
+          JSON Web Tokens (access + refresh tokens), validaci&oacute;n de credenciales con m&iacute;nimo 8 caracteres de
+          contrase&ntilde;a y correo electr&oacute;nico v&aacute;lido, y cierre de sesi&oacute;n con revocaci&oacute;n de tokens, funcional antes de la
+          entrega del prototipo en el Escenario 3.
+        </li>
+        <li>
+          <strong>Desarrollar una biblioteca digital personal</strong> que soporte la importaci&oacute;n de libros en al
+          menos 3 formatos (EPUB, PDF, TXT), visualizaci&oacute;n de portadas, metadatos (autor, formato, cap&iacute;tulos) y
+          barra de progreso de lectura, con b&uacute;squeda y filtrado por t&iacute;tulo y autor, medible por la cantidad de
+          formatos soportados y la velocidad de respuesta en la carga de la biblioteca (&lt;2 segundos para 50 libros),
+          completado en las semanas 2-4.
+        </li>
+        <li>
+          <strong>Integrar un motor de Text-to-Speech (TTS)</strong> que utilice la Web Speech API del navegador y las
+          APIs nativas de cada plataforma v&iacute;a Capacitor, con resaltado visual palabra por palabra sincronizado en
+          tiempo real, controles de reproducci&oacute;n (play/pause/stop) y ajuste de velocidad (0.75x, 1x, 1.5x),
+          reduciendo la fricci&oacute;n de lectura en al menos un 30% respecto a la lectura silenciosa seg&uacute;n las pruebas
+          con usuarios, disponible en la versi&oacute;n beta del producto (semanas 4-6).
+        </li>
+        <li>
+          <strong>Implementar persistencia de progreso de lectura</strong> que almacene la posici&oacute;n exacta del
+          usuario (cap&iacute;tulo y palabra) y la sincronice con el backend mediante API REST, permitiendo retomar la
+          lectura desde cualquier dispositivo con una desviaci&oacute;n m&aacute;xima de 0 palabras en la posici&oacute;n guardada,
+          durante las semanas 5-7.
+        </li>
+        <li>
+          <strong>Validar la usabilidad y compatibilidad multiplataforma</strong> con al menos 8 usuarios reales
+          (4 lectores habituales y 4 personas con necesidades de accesibilidad), desplegando en Android (Capacitor),
+          iOS (Capacitor) y navegador web, obteniendo un puntaje m&iacute;nimo de 4/5 en criterios de experiencia de
+          usuario y confirmando que el TTS sincronizado funcione en las tres plataformas, antes de la entrega final
+          del m&oacute;dulo.
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ JUSTIFICACI&Oacute;N -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon purple">&#128218;</div>
+      <h2>Justificaci&oacute;n</h2>
+    </div>
+    <div class="section-body">
+      <p>
+        El sector de la lectura digital y los audiolibros representa uno de los mercados de mayor crecimiento sostenido
+        a nivel global. De acuerdo con <span class="cite">Statista (2025)</span>, el mercado mundial de ebooks fue
+        valorado en 22.400 millones de d&oacute;lares en 2024 y se proyecta que alcance los 34.500 millones en 2033, con
+        un crecimiento anual compuesto (CAGR) del 4,9%. Paralelamente, el mercado de audiolibros alcanz&oacute; los 8.150
+        millones de d&oacute;lares en 2024 y se estima que crezca a un ritmo del 26,5% anual hasta superar los 67.000
+        millones en 2033 <span class="cite">(GMInsights, 2025)</span>, lo que evidencia una demanda creciente por
+        experiencias de lectura que integren texto y audio. En este sentido, LectorSync se posiciona en la
+        intersecci&oacute;n de ambos mercados al ofrecer lectura digital con s&iacute;ntesis de voz sincronizada.
+      </p>
+      <p>
+        Desde la perspectiva de la accesibilidad, la <span class="cite">Organizaci&oacute;n Mundial de la Salud
+        (OMS, 2023)</span> estima que al menos 2.200 millones de personas en el mundo tienen alg&uacute;n tipo de deficiencia
+        visual o ceguera. Las aplicaciones que integran Text-to-Speech con resaltado visual facilitan el acceso a la
+        lectura para personas con dislexia, baja visi&oacute;n o dificultades de aprendizaje, aline&aacute;ndose con los principios
+        del Dise&ntilde;o Universal para el Aprendizaje (UDL) de <span class="cite">CAST (2022)</span>, cuyas directrices
+        versi&oacute;n 3.0 promueven m&uacute;ltiples medios de representaci&oacute;n, acci&oacute;n y expresi&oacute;n, y compromiso en el aprendizaje.
+        El mercado global de TTS fue valorado en 4.000 millones de d&oacute;lares en 2024 y se proyecta que alcance los
+        7.600 millones para 2029 <span class="cite">(MarketsandMarkets, 2025)</span>, donde el segmento educativo
+        constituye uno de los principales motores de crecimiento: aproximadamente el 50% de las plataformas de
+        educaci&oacute;n en l&iacute;nea a nivel global ya integran TTS para mejorar la participaci&oacute;n de estudiantes con
+        discapacidades de aprendizaje.
+      </p>
+      <p>
+        En el contexto colombiano, la pertinencia de una soluci&oacute;n multiplataforma se sustenta en que Colombia super&oacute;
+        los 48 millones de accesos a internet m&oacute;vil en el tercer trimestre de 2024, de los cuales el 85,4% oper&oacute;
+        en tecnolog&iacute;a 4G y el 5,8% en 5G <span class="cite">(MinTIC, 2024)</span>. La penetraci&oacute;n de smartphones
+        en el pa&iacute;s alcanza el 79% y se proyecta que llegue al 97% en 2030, con 87,4 millones de l&iacute;neas de telefon&iacute;a
+        m&oacute;vil activas <span class="cite">(Trustonic, 2024)</span>, lo que hace indispensable que LectorSync contemple
+        Android, iOS y Web de manera nativa desde su primera versi&oacute;n.
+      </p>
+      <p>
+        Finalmente, la elecci&oacute;n de Ionic como framework se justifica por su arquitectura basada en est&aacute;ndares web
+        (HTML, CSS, TypeScript/Angular), lo que facilita el aprendizaje en un contexto de especializaci&oacute;n
+        tecnol&oacute;gica. Ionic respalda m&aacute;s de 5 millones de aplicaciones en m&aacute;s de 200 pa&iacute;ses
+        <span class="cite">(Ionic Framework, 2024)</span> y, junto con Capacitor, permite acceder a APIs nativas de
+        cada plataforma (TTS, sistema de archivos, notificaciones) desde una &uacute;nica base de c&oacute;digo, reduciendo
+        costos y tiempos de desarrollo entre un 30% y un 50% respecto al desarrollo nativo
+        <span class="cite">(Bi&oslash;rn-Hansen et al., 2020)</span>. La adopci&oacute;n de tecnolog&iacute;as h&iacute;bridas ha crecido hasta
+        el 74% de los desarrolladores en 2025 <span class="cite">(RipenApps, 2025)</span>, consolidando este enfoque
+        como una estrategia viable y competitiva para el desarrollo m&oacute;vil actual.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════ REFERENCIAS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-icon rose">&#128209;</div>
+      <h2>Referencias</h2>
+    </div>
+    <div class="section-body">
+      <ul class="ref-list">
+        <li>
+          Atlas AI Dev. (2026). <em>9 Best Text-to-Speech Book Readers in 2026 (Free and Paid)</em>. Atlas AI Dev.
+          <a href="https://atlasaidev.com/best-text-to-speech-book-readers/" target="_blank" rel="noopener">https://atlasaidev.com/best-text-to-speech-book-readers/</a>
+        </li>
+        <li>
+          Bi&oslash;rn-Hansen, A., Majchrzak, T. A., &amp; Gr&oslash;nli, T.-M. (2020). Progressive Web Apps for the Unified
+          Development of Mobile Applications. <em>Web Information Systems and Technologies</em>, 64-86. Springer.
+          <a href="https://doi.org/10.1007/978-3-030-35510-4_4" target="_blank" rel="noopener">https://doi.org/10.1007/978-3-030-35510-4_4</a>
+        </li>
+        <li>
+          CAST. (2022). <em>Universal Design for Learning Guidelines version 3.0</em>. CAST, Inc.
+          <a href="https://udlguidelines.cast.org/" target="_blank" rel="noopener">https://udlguidelines.cast.org/</a>
+        </li>
+        <li>
+          GMInsights. (2025). <em>Audiobooks Market Trends, Share and Forecast, 2025-2034</em>. Global Market Insights.
+          <a href="https://www.gminsights.com/industry-analysis/audiobooks-market" target="_blank" rel="noopener">https://www.gminsights.com/industry-analysis/audiobooks-market</a>
+        </li>
+        <li>
+          Ionic Framework. (2024). <em>Ionic Framework - Cross-Platform Mobile App Development Leader</em>. Ionic.
+          <a href="https://ionicframework.com/" target="_blank" rel="noopener">https://ionicframework.com/</a>
+        </li>
+        <li>
+          MarketsandMarkets. (2025). <em>Text-to-Speech Market Size, Share, Trends &amp; Industry Analysis 2033</em>.
+          MarketsandMarkets.
+          <a href="https://www.marketsandmarkets.com/Market-Reports/text-to-speech-market-2434298.html" target="_blank" rel="noopener">https://www.marketsandmarkets.com/Market-Reports/text-to-speech-market-2434298.html</a>
+        </li>
+        <li>
+          MinTIC. (2024). <em>Colombia super&oacute; los 48 millones de accesos a Internet m&oacute;vil en el tercer trimestre del
+          2024</em>. Ministerio de Tecnolog&iacute;as de la Informaci&oacute;n y las Comunicaciones.
+          <a href="https://www.mintic.gov.co/portal/715/w3-article-399983.html" target="_blank" rel="noopener">https://www.mintic.gov.co/portal/715/w3-article-399983.html</a>
+        </li>
+        <li>
+          MoonReader Inc. (2024). <em>Moon+ Reader - eBook Reader</em>. Google Play Store.
+          <a href="https://play.google.com/store/apps/details?id=com.flyersoft.moonreader" target="_blank" rel="noopener">https://play.google.com/store/apps/details?id=com.flyersoft.moonreader</a>
+        </li>
+        <li>
+          Organizaci&oacute;n Mundial de la Salud. (2023). <em>Ceguera y discapacidad visual: Datos y cifras</em>. OMS.
+          <a href="https://www.who.int/es/news-room/fact-sheets/detail/blindness-and-visual-impairment" target="_blank" rel="noopener">https://www.who.int/es/news-room/fact-sheets/detail/blindness-and-visual-impairment</a>
+        </li>
+        <li>
+          RipenApps. (2025). <em>Cross-Platform App Development Statistics 2025: Key Insights for Business Leaders</em>.
+          RipenApps.
+          <a href="https://ripenapps.com/blog/cross-platform-app-development-statistics/" target="_blank" rel="noopener">https://ripenapps.com/blog/cross-platform-app-development-statistics/</a>
+        </li>
+        <li>
+          Speechify. (2025). <em>Voice Dream Reader vs NaturalReader</em>. Speechify.
+          <a href="https://speechify.com/blog/natural-reader-vs-voice-dream/" target="_blank" rel="noopener">https://speechify.com/blog/natural-reader-vs-voice-dream/</a>
+        </li>
+        <li>
+          Statista. (2025). <em>eBooks - Worldwide: Statista Market Forecast</em>. Statista Research Department.
+          <a href="https://www.statista.com/outlook/dmo/digital-media/epublishing/ebooks/worldwide" target="_blank" rel="noopener">https://www.statista.com/outlook/dmo/digital-media/epublishing/ebooks/worldwide</a>
+        </li>
+        <li>
+          Trustonic. (2024). <em>Brecha digital en Colombia: conectividad y 5G</em>. Trustonic Latin America.
+          <a href="https://www.trustonic.com/la-es/opinion/brecha-digital-colombia-conectividad-5g/" target="_blank" rel="noopener">https://www.trustonic.com/la-es/opinion/brecha-digital-colombia-conectividad-5g/</a>
+        </li>
+        <li>
+          UNESCO. (2023). <em>Informe de seguimiento de la educaci&oacute;n en el mundo 2023: Tecnolog&iacute;a en la educaci&oacute;n:
+          &iquest;Una herramienta en los t&eacute;rminos de qui&eacute;n?</em>. UNESCO.
+          <a href="https://www.unesco.org/gem-report/2023" target="_blank" rel="noopener">https://www.unesco.org/gem-report/2023</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ FOOTER -->
+<footer class="footer">
+  <strong>LectorSync</strong> &mdash; Lectura sincronizada en Android, iOS y Web con Ionic + Capacitor<br>
+  EquipoEPMB02 - 4 &bull; Especializaci&oacute;n Tecnol&oacute;gica en Desarrollo de Aplicaciones para Redes M&oacute;viles &bull; Mayo 2026
+</footer>
+
+</body>
+</html>

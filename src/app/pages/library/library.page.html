@@ -1,0 +1,98 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Mi Biblioteca</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="importBook()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      placeholder="Buscar libros..."
+      animated
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Estado vacío -->
+  <div class="empty-state" *ngIf="!isLoading && books.length === 0">
+    <ion-icon name="library-outline" class="empty-icon"></ion-icon>
+    <h2>Tu biblioteca está vacía</h2>
+    <p>Importa tu primer libro para comenzar a leer</p>
+    <ion-button (click)="importBook()">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      Importar libro
+    </ion-button>
+  </div>
+
+  <!-- Skeleton loading -->
+  <ion-list *ngIf="isLoading">
+    <ion-item *ngFor="let i of [1, 2, 3, 4, 5]">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <ion-skeleton-text
+          [animated]="true"
+          style="width: 70%"
+        ></ion-skeleton-text>
+        <ion-skeleton-text
+          [animated]="true"
+          style="width: 40%"
+        ></ion-skeleton-text>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Lista de libros -->
+  <ion-list *ngIf="!isLoading && books.length > 0">
+    <ion-item-sliding *ngFor="let book of filteredBooks">
+      <ion-item button (click)="openBook(book)" detail>
+        <ion-thumbnail slot="start" class="book-cover">
+          <img
+            *ngIf="book.coverUrl"
+            [src]="book.coverUrl"
+            [alt]="book.title"
+          />
+          <div *ngIf="!book.coverUrl" class="cover-placeholder">
+            <ion-icon name="book-outline"></ion-icon>
+          </div>
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ book.title }}</h2>
+          <p *ngIf="book.author">{{ book.author }}</p>
+          <p>
+            <ion-badge color="medium">{{ book.fileFormat | uppercase }}</ion-badge>
+            <span class="chapter-count">
+              {{ book.totalChapters }} capítulos
+            </span>
+          </p>
+          <ion-progress-bar
+            *ngIf="book.progress > 0"
+            [value]="book.progress"
+            color="success"
+          ></ion-progress-bar>
+          <p *ngIf="book.progress > 0" class="progress-label">
+            {{ getProgressPercent(book) }}% leído
+          </p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="confirmDelete(book)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

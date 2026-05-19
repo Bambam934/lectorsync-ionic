@@ -1,0 +1,80 @@
+.toc-panel {
+  max-height: 50vh;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--ion-color-light-shade);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+
+  p {
+    margin-top: 12px;
+    color: var(--ion-color-medium);
+  }
+}
+
+.reader-content {
+  padding: 20px 16px 80px;
+  line-height: 1.8;
+  max-width: 720px;
+  margin: 0 auto;
+
+  .chapter-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-bottom: 24px;
+    text-align: center;
+    color: var(--ion-color-primary);
+  }
+
+  .text-body {
+    text-align: justify;
+  }
+
+  .word {
+    transition: background-color 0.15s ease;
+    padding: 1px 0;
+    border-radius: 3px;
+  }
+
+  .highlighted-word {
+    background-color: var(--ion-color-warning);
+    color: var(--ion-color-warning-contrast);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+}
+
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ion-color-light-shade);
+}
+
+.tts-toolbar {
+  .tts-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 8px;
+  }
+
+  .rate-control {
+    display: flex;
+    gap: 4px;
+    margin-left: 8px;
+
+    ion-chip {
+      font-size: 11px;
+      height: 28px;
+    }
+  }
+}

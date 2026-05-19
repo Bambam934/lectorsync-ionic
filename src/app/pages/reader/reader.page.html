@@ -1,0 +1,128 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/library" text=""></ion-back-button>
+      <ion-button (click)="toggleToc()">
+        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ currentChapter?.title || bookTitle }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="changeFontSize(-2)">
+        <ion-icon slot="icon-only" name="text-outline" style="font-size: 14px"></ion-icon>
+      </ion-button>
+      <ion-button (click)="changeFontSize(2)">
+        <ion-icon slot="icon-only" name="text-outline" style="font-size: 22px"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Panel de tabla de contenidos -->
+  <ion-list *ngIf="showToc" class="toc-panel">
+    <ion-list-header>
+      <ion-label>Tabla de contenidos</ion-label>
+    </ion-list-header>
+    <ion-item
+      *ngFor="let chapter of chapters"
+      button
+      (click)="selectChapter(chapter)"
+      [color]="currentChapter?.id === chapter.id ? 'primary' : ''"
+    >
+      <ion-label>
+        <h3>{{ chapter.title }}</h3>
+        <p>{{ chapter.wordCount }} palabras</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando contenido...</p>
+  </div>
+
+  <!-- Contenido del capítulo con resaltado palabra por palabra -->
+  <div
+    class="reader-content"
+    *ngIf="!isLoading && currentChapter"
+    [style.fontSize.px]="fontSize"
+  >
+    <h2 class="chapter-title">{{ currentChapter.title }}</h2>
+    <div class="text-body">
+      <span
+        *ngFor="let word of words; let i = index"
+        [class.highlighted-word]="isCurrentWord(i)"
+        class="word"
+      >
+        {{ word }}
+      </span>
+    </div>
+
+    <!-- Navegación entre capítulos -->
+    <div class="chapter-nav">
+      <ion-button
+        fill="outline"
+        size="small"
+        (click)="goToPreviousChapter()"
+        [disabled]="chapters.indexOf(currentChapter) === 0"
+      >
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Anterior
+      </ion-button>
+      <ion-button
+        fill="outline"
+        size="small"
+        (click)="goToNextChapter()"
+        [disabled]="chapters.indexOf(currentChapter) === chapters.length - 1"
+      >
+        Siguiente
+        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Barra de controles TTS -->
+<ion-footer>
+  <ion-toolbar color="dark" class="tts-toolbar">
+    <div class="tts-controls">
+      <ion-button fill="clear" color="light" (click)="stopPlayback()">
+        <ion-icon slot="icon-only" name="stop-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        fill="solid"
+        shape="round"
+        color="primary"
+        (click)="togglePlayback()"
+        [disabled]="!currentChapter"
+      >
+        <ion-icon
+          slot="icon-only"
+          [name]="ttsState.isPlaying ? 'pause' : 'play'"
+        ></ion-icon>
+      </ion-button>
+
+      <ion-button fill="clear" color="light" (click)="goToNextChapter()">
+        <ion-icon slot="icon-only" name="play-skip-forward-outline"></ion-icon>
+      </ion-button>
+
+      <div class="rate-control">
+        <ion-chip
+          [color]="ttsState.rate === 0.75 ? 'primary' : 'medium'"
+          (click)="setRate(0.75)"
+        >0.75x</ion-chip>
+        <ion-chip
+          [color]="ttsState.rate === 1.0 ? 'primary' : 'medium'"
+          (click)="setRate(1.0)"
+        >1x</ion-chip>
+        <ion-chip
+          [color]="ttsState.rate === 1.5 ? 'primary' : 'medium'"
+          (click)="setRate(1.5)"
+        >1.5x</ion-chip>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-footer>
