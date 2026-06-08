@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+RUN apk add --no-cache git python3 make g++ \
+  && npm install -g @ionic/cli@7 @angular/cli@20
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 8100 35729
+
+CMD ["npx", "ionic", "serve", "--no-open", "--host", "0.0.0.0", "--port", "8100"]

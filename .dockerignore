@@ -1,0 +1,16 @@
+node_modules
+www
+.angular
+.git
+.vscode
+.idea
+android
+ios
+dist
+coverage
+*.log
+.DS_Store
+.env
+.env.local
+.claude
+.npm-cache

@@ -1,0 +1,17 @@
+services:
+  lectorsync:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: lectorsync-dev
+    ports:
+      - "8100:8100"
+      - "35729:35729"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true

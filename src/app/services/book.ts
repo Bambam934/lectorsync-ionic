@@ -208,13 +208,40 @@ export class BookService {
   ): Promise<string> {
     if (fileFormat === 'txt') {
       const text = (await file.text()).trim();
+      if (text) return text;
+    }
 
-      if (text) {
-        return text;
+    if (fileFormat === 'pdf') {
+      try {
+        const text = await this.extractPdfText(file);
+        if (text.trim()) return text;
+      } catch (error) {
+        console.error('Error extrayendo PDF:', error);
       }
     }
 
     return `El archivo "${title}" fue importado localmente en LectorSync. En esta versión demo se guarda en la biblioteca y se crea un capítulo de prueba para validar búsqueda, apertura del libro y lectura con voz. La extracción real de contenido para archivos ${fileFormat.toUpperCase()} queda preparada para una siguiente iteración.`;
+  }
+
+  private async extractPdfText(file: File): Promise<string> {
+    const pdfjs: any = await import('pdfjs-dist');
+    pdfjs.GlobalWorkerOptions.workerSrc = 'assets/pdf.worker.min.mjs';
+
+    const data = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data }).promise;
+
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const pageText = content.items
+        .map((item: any) => item.str)
+        .filter((s: string) => s.length > 0)
+        .join(' ');
+      text += pageText + '\n\n';
+    }
+
+    return text.trim();
   }
 
   private createFallbackChapter(bookId: string): Chapter {
