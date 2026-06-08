@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { AuthService } from '../../services/auth';
@@ -10,17 +10,15 @@ import { AuthService } from '../../services/auth';
   standalone: false,
 })
 export class LoginPage {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private loadingCtrl = inject(LoadingController);
+  private toastCtrl = inject(ToastController);
+
   isRegister = false;
   name = '';
   email = '';
   password = '';
-
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
-  ) {}
 
   ionViewWillEnter(): void {
     if (this.authService.isAuthenticated) {

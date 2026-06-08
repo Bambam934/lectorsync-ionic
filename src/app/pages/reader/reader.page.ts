@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,11 @@ import { TtsService, TtsState } from '../../services/tts';
   standalone: false,
 })
 export class ReaderPage implements ViewWillEnter, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private bookService = inject(BookService);
+  private ttsService = inject(TtsService);
+  private toastCtrl = inject(ToastController);
+
   bookId = '';
   bookTitle = '';
   chapters: Chapter[] = [];
@@ -24,13 +29,6 @@ export class ReaderPage implements ViewWillEnter, OnDestroy {
   fontSize = 18;
 
   private ttsSub?: Subscription;
-
-  constructor(
-    private route: ActivatedRoute,
-    private bookService: BookService,
-    private ttsService: TtsService,
-    private toastCtrl: ToastController
-  ) {}
 
   ionViewWillEnter(): void {
     this.bookId = this.route.snapshot.paramMap.get('bookId') ?? '';

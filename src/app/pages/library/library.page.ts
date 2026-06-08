@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   AlertController,
@@ -16,18 +16,16 @@ import { AuthService } from '../../services/auth';
   standalone: false,
 })
 export class LibraryPage {
+  private bookService = inject(BookService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private loadingCtrl = inject(LoadingController);
+  private toastCtrl = inject(ToastController);
+  private alertCtrl = inject(AlertController);
+
   books: Book[] = [];
   isLoading = true;
   searchTerm = '';
-
-  constructor(
-    private bookService: BookService,
-    private authService: AuthService,
-    private router: Router,
-    private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController
-  ) {}
 
   ionViewWillEnter(): void {
     this.loadBooks();
