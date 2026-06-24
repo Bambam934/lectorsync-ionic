@@ -1,65 +1,108 @@
-<ion-content class="ion-padding" [fullscreen]="true">
+<ion-content class="login-content" [fullscreen]="true">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
   <div class="login-container">
-    <div class="logo-section">
-      <ion-icon name="book-outline" class="logo-icon"></ion-icon>
+    <header class="hero">
+      <div class="logo-mark">
+        <ion-icon name="book"></ion-icon>
+      </div>
       <h1>LectorSync</h1>
-      <p>Lectura sincronizada con audio</p>
-    </div>
+      <p class="tagline">Lectura sincronizada con audio</p>
+    </header>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-          {{ isRegister ? 'Crear cuenta' : 'Iniciar sesión' }}
-        </ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <ion-item *ngIf="isRegister">
-          <ion-label position="floating">Nombre</ion-label>
-          <ion-input
-            type="text"
-            [(ngModel)]="name"
-            autocapitalize="words"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="floating">Correo electrónico</ion-label>
-          <ion-input
-            type="email"
-            [(ngModel)]="email"
-            autocomplete="email"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="floating">Contraseña</ion-label>
-          <ion-input
-            type="password"
-            [(ngModel)]="password"
-            (keyup.enter)="submit()"
-          ></ion-input>
-        </ion-item>
-
-        <ion-button expand="block" (click)="submit()" class="ion-margin-top">
-          {{ isRegister ? 'Registrarse' : 'Ingresar' }}
-        </ion-button>
-
-        <ion-button
-          expand="block"
-          fill="clear"
-          (click)="toggleMode()"
-          class="ion-margin-top"
+    <section class="card" role="region" [attr.aria-label]="isRegister ? 'Crear cuenta' : 'Iniciar sesión'">
+      <div class="tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          class="tab"
+          [class.active]="!isRegister"
+          [attr.aria-selected]="!isRegister"
+          (click)="isRegister = false"
         >
-          {{
-            isRegister
-              ? '¿Ya tienes cuenta? Inicia sesión'
-              : '¿No tienes cuenta? Regístrate'
-          }}
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+          Iniciar sesión
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="tab"
+          [class.active]="isRegister"
+          [attr.aria-selected]="isRegister"
+          (click)="isRegister = true"
+        >
+          Crear cuenta
+        </button>
+      </div>
 
-    <p class="team-label">EquipoEPMB02 - 4</p>
+      <form class="form" (ngSubmit)="submit()" novalidate>
+        <label class="field" *ngIf="isRegister">
+          <span class="field-label">Nombre</span>
+          <div class="field-input">
+            <ion-icon name="person-outline"></ion-icon>
+            <input
+              type="text"
+              [(ngModel)]="name"
+              name="name"
+              autocomplete="name"
+              autocapitalize="words"
+              placeholder="Tu nombre"
+            />
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Correo electrónico</span>
+          <div class="field-input">
+            <ion-icon name="mail-outline"></ion-icon>
+            <input
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              autocomplete="email"
+              inputmode="email"
+              placeholder="tunombre@correo.com"
+            />
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Contraseña</span>
+          <div class="field-input">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              (keyup.enter)="submit()"
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            >
+              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
+          </div>
+        </label>
+
+        <button type="submit" class="submit-btn" [disabled]="!canSubmit">
+          {{ isRegister ? 'Crear cuenta' : 'Ingresar' }}
+        </button>
+
+        <p class="form-hint">
+          Modo demo · tus datos se guardan localmente
+        </p>
+      </form>
+    </section>
+
+    <footer class="team-credit">
+      <span>EquipoEPMB02 · 2025</span>
+    </footer>
   </div>
 </ion-content>

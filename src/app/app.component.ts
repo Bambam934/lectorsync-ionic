@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { PreferencesService } from './services/preferences';
+import { TtsService } from './services/tts';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +9,13 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
-  constructor() {}
+  private prefs = inject(PreferencesService);
+  private tts = inject(TtsService);
+
+  constructor() {
+    this.prefs.applyInitialTheme();
+    const state = this.prefs.current;
+    this.tts.setRate(state.defaultRate);
+    this.tts.setVoice(state.voiceURI);
+  }
 }

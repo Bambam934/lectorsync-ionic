@@ -68,3 +68,18 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Local Claude settings
+.claude/
+
+# Android build artifacts
+/android
+
+# APK and project archives (use Drive/Releases for distribution)
+*.apk
+*.aab
+*-proyecto.zip
+
+# LaTeX intermediates
+INFORME-APK.tex
+

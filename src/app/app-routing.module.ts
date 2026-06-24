@@ -24,6 +24,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/reader/reader.module').then((m) => m.ReaderPageModule),
   },
+  {
+    path: 'settings',
+    loadChildren: () =>
+      import('./pages/settings/settings.module').then(
+        (m) => m.SettingsPageModule,
+      ),
+  },
 ];
 
 @NgModule({

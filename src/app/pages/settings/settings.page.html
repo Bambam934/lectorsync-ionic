@@ -1,0 +1,196 @@
+<ion-header [translucent]="true" class="settings-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/library" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Configuración</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="settings-content">
+  <div class="container">
+
+    <!-- Usuario -->
+    <section class="card user-card">
+      <div class="user-avatar">
+        <span>{{ (userName || '?').charAt(0).toUpperCase() }}</span>
+      </div>
+      <div class="user-info">
+        <h2>{{ userName }}</h2>
+        <p *ngIf="userEmail">{{ userEmail }}</p>
+      </div>
+      <button type="button" class="link-btn" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Salir</span>
+      </button>
+    </section>
+
+    <!-- Apariencia -->
+    <section class="card">
+      <header class="section-header">
+        <ion-icon name="color-palette-outline"></ion-icon>
+        <div>
+          <h3>Apariencia</h3>
+          <p>Elige cómo se ve la app</p>
+        </div>
+      </header>
+
+      <div class="theme-grid">
+        <button
+          type="button"
+          *ngFor="let opt of themeOptions"
+          class="theme-tile"
+          [class.active]="state.theme === opt.value"
+          (click)="setTheme(opt.value)"
+        >
+          <ion-icon [name]="opt.icon"></ion-icon>
+          <span>{{ opt.label }}</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Voz / TTS -->
+    <section class="card">
+      <header class="section-header">
+        <ion-icon name="volume-high-outline"></ion-icon>
+        <div>
+          <h3>Voz y lectura</h3>
+          <p>Cómo suena el lector</p>
+        </div>
+      </header>
+
+      <div class="row">
+        <label class="row-label">Velocidad por defecto</label>
+        <div class="rate-chips">
+          <button
+            type="button"
+            *ngFor="let r of rateOptions"
+            class="rate-chip"
+            [class.active]="state.defaultRate === r"
+            (click)="setRate(r)"
+          >{{ r }}x</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="row-label" for="font-size-input">
+          Tamaño de texto
+          <span class="row-value">{{ state.defaultFontSize }} px</span>
+        </label>
+        <ion-range
+          id="font-size-input"
+          min="14"
+          max="34"
+          step="2"
+          [value]="state.defaultFontSize"
+          (ionChange)="setFontSize($any($event.detail.value))"
+          color="primary"
+        >
+          <ion-icon slot="start" name="text-outline" style="font-size: 14px"></ion-icon>
+          <ion-icon slot="end" name="text-outline" style="font-size: 22px"></ion-icon>
+        </ion-range>
+      </div>
+
+      <div class="row">
+        <label class="row-label">
+          Voz
+          <span class="row-value" *ngIf="loadingVoices">Cargando...</span>
+        </label>
+
+        <div class="voice-list" *ngIf="!loadingVoices">
+          <button
+            type="button"
+            class="voice-item"
+            [class.active]="!state.voiceURI"
+            (click)="setVoice(null)"
+          >
+            <span class="voice-name">Voz del sistema</span>
+            <span class="voice-meta">Predeterminada</span>
+            <ion-icon
+              *ngIf="!state.voiceURI"
+              class="check"
+              name="checkmark-circle"
+            ></ion-icon>
+          </button>
+
+          <ng-container *ngFor="let group of voiceGroups; trackBy: trackGroup">
+            <div class="lang-divider">{{ group.lang }}</div>
+            <button
+              type="button"
+              *ngFor="let v of group.voices; trackBy: trackVoice"
+              class="voice-item"
+              [class.active]="state.voiceURI === v.voiceURI"
+              (click)="setVoice(v.voiceURI)"
+            >
+              <span class="voice-name">{{ v.name }}</span>
+              <span class="voice-meta">{{ v.isLocal ? 'Local' : 'Red' }}</span>
+              <ion-icon
+                *ngIf="state.voiceURI === v.voiceURI"
+                class="check"
+                name="checkmark-circle"
+              ></ion-icon>
+            </button>
+          </ng-container>
+
+          <p class="voice-empty" *ngIf="voiceGroups.length === 0">
+            No hay voces disponibles en este dispositivo.
+          </p>
+        </div>
+      </div>
+
+      <button type="button" class="action-btn" (click)="testVoice()">
+        <ion-icon name="play-circle-outline"></ion-icon>
+        Probar voz
+      </button>
+    </section>
+
+    <!-- Datos -->
+    <section class="card">
+      <header class="section-header">
+        <ion-icon name="archive-outline"></ion-icon>
+        <div>
+          <h3>Datos</h3>
+          <p>Almacenamiento local</p>
+        </div>
+      </header>
+
+      <button type="button" class="action-btn warn" (click)="clearReadingData()">
+        <ion-icon name="trash-outline"></ion-icon>
+        Borrar biblioteca local
+      </button>
+
+      <button type="button" class="action-btn" (click)="resetPreferences()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        Restablecer preferencias
+      </button>
+    </section>
+
+    <!-- Acerca de -->
+    <section class="card about-card">
+      <header class="section-header">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <div>
+          <h3>Acerca de</h3>
+          <p>LectorSync · EquipoEPMB02</p>
+        </div>
+      </header>
+
+      <ul class="about-list">
+        <li>
+          <span>Versión</span>
+          <strong>{{ appVersion }}</strong>
+        </li>
+        <li>
+          <span>Equipo</span>
+          <strong>EquipoEPMB02 — 4</strong>
+        </li>
+        <li>
+          <span>Tecnología</span>
+          <strong>Ionic + Angular + Capacitor</strong>
+        </li>
+      </ul>
+    </section>
+
+    <p class="footer-credit">© 2025 LectorSync</p>
+  </div>
+</ion-content>
